@@ -1,5 +1,7 @@
 package arcaptcha
 
+import "fmt"
+
 type verifyCaptchaRequest struct {
 	SiteKey     string `json:"site_key"`
 	SecretKey   string `json:"secret_key"`
@@ -7,11 +9,10 @@ type verifyCaptchaRequest struct {
 }
 
 type Error struct {
-	Status  int         `json:"status"`
-	Message string      `json:"message"`
-	Details interface{} `json:"details,omitempty"`
+	Status  int    `json:"status"`
+	Message string `json:"message"`
 }
 
 func (e Error) Error() string {
-	return e.Message
+	return fmt.Sprintf("return status %v: %v", e.Status, e.Message)
 }
