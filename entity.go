@@ -12,7 +12,6 @@ type Error struct {
 	Details interface{} `json:"details,omitempty"`
 }
 
-// Error is required by the error interface.
 func (e Error) Error() string {
 	return e.Message
 }
