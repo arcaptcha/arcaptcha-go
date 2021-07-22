@@ -3,7 +3,6 @@ package arcaptcha
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"strconv"
@@ -58,13 +57,13 @@ func (w *Website) ValidateCaptcha(challengeID string) error {
 	if err != nil {
 		return err
 	}
-	errRes := new(errorResponse)
-	if err = json.Unmarshal(bin, errRes); err != nil {
+	var errRes Error
+	if err = json.Unmarshal(bin, &errRes); err != nil {
 		return err
 	}
 
 	if res.StatusCode != http.StatusOK {
-		return fmt.Errorf("return status %v: %v", res.StatusCode, errRes.Message)
+		return errRes
 	}
 	return nil
 

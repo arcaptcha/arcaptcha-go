@@ -6,6 +6,13 @@ type verifyCaptchaRequest struct {
 	ChallengeID string `json:"challenge_id"`
 }
 
-type errorResponse struct {
-	Message string `json:"message"`
+type Error struct {
+	Status  int         `json:"status"`
+	Message string      `json:"message"`
+	Details interface{} `json:"details,omitempty"`
+}
+
+// Error is required by the error interface.
+func (e Error) Error() string {
+	return e.Message
 }
