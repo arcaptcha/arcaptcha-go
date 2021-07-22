@@ -13,7 +13,7 @@ Arcaptcha library implementation in Golang for validate captcha.
 ### Installation
 
 ```
-go get -u github.com/arcaptcha/arcaptcha-go/arcaptcha
+go get -u github.com/arcaptcha/arcaptcha-go
 ```
 
 ### Usage
