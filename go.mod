@@ -1,3 +1,3 @@
-module arcaptcha-go
+module arcaptcha
 
 go 1.16
