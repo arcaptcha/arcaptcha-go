@@ -8,7 +8,7 @@ import (
 	"strconv"
 )
 
-const arcaptchaApi = "http://localhost:80/arcaptcha/api/verify"
+const arcaptchaApi = "https://api.arcaptcha.ir/arcaptcha/api/verify"
 
 type Website struct {
 	SiteKey   string `json:"site_key"`

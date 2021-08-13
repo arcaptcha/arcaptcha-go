@@ -7,7 +7,7 @@
 
 Arcaptcha
 =====================
-Arcaptcha library implementation in Golang for validate captcha.
+Arcaptcha library implementation in Golang to validate captcha.
 
 ## [Guide](https://arcaptcha.ir/guide)
 ### Installation
