@@ -17,8 +17,24 @@ go get -u github.com/arcaptcha/arcaptcha-go
 ```
 
 ### Usage
-Register on [Arcaptcha](https://arcaptcha.ir/) and get your own SiteKey and SecretKey
+Register on [Arcaptcha](https://arcaptcha.ir/), create website and get your own SiteKey and SecretKey
 ```go
-website := arcaptcha.NewWebsite(SiteKey, SecretKey)
-err := website.ValidateCaptcha(challengeID)
+package main
+
+import (
+	"log"
+
+	"github.com/arcaptcha/arcaptcha-go"
+)
+
+func main() {
+	website := arcaptcha.NewWebsite("YOUR_SITE_KEY", "YOUR_SECRET_KEY")
+	//ChallengeID is created for each captcha
+	//After you put captcha widget in your website, you can get challengeID
+	if err := website.ValidateCaptcha("challengeID"); err != nil {
+		log.Fatal(err)
+	}
+	//Its OK
+	log.Printf("Captcha %v is valid and challenge succeeded", "challengeID")
+}
 ```
