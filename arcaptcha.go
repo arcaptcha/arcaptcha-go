@@ -11,8 +11,8 @@ import (
 const arcaptchaApi = "https://arcaptcha.ir/2/siteverify"
 
 type Website struct {
-	SiteKey   string `json:"site_key"`
-	SecretKey string `json:"secret_key"`
+	SiteKey   string
+	SecretKey string
 }
 
 func NewWebsite(siteKey, secretKey string) *Website {
@@ -21,7 +21,8 @@ func NewWebsite(siteKey, secretKey string) *Website {
 		SecretKey: secretKey,
 	}
 }
-func (w *Website) ValidateCaptcha(challengeID string) error {
+
+func (w *Website) ValidateCaptcha(challengeID string) (success bool, err error) {
 
 	data := &verifyCaptchaRequest{
 		SiteKey:     w.SiteKey,
@@ -30,7 +31,7 @@ func (w *Website) ValidateCaptcha(challengeID string) error {
 	}
 	bin, err := json.Marshal(data)
 	if err != nil {
-		return err
+		return
 	}
 
 	req, err := http.NewRequest(
@@ -39,7 +40,7 @@ func (w *Website) ValidateCaptcha(challengeID string) error {
 		bytes.NewBuffer(bin),
 	)
 	if err != nil {
-		return err
+		return
 	}
 
 	req.Header.Add("Content-Type", "application/json")
@@ -47,7 +48,7 @@ func (w *Website) ValidateCaptcha(challengeID string) error {
 
 	res, err := http.DefaultClient.Do(req)
 	if err != nil {
-		return err
+		return
 	}
 	defer func() {
 		_ = res.Body.Close()
@@ -55,16 +56,14 @@ func (w *Website) ValidateCaptcha(challengeID string) error {
 
 	bin, err = ioutil.ReadAll(res.Body)
 	if err != nil {
-		return err
-	}
-	var errRes Error
-	if err = json.Unmarshal(bin, &errRes); err != nil {
-		return err
+		return
 	}
 
-	if res.StatusCode != http.StatusOK {
-		return errRes
+	var response VerifyCaptchaResponse
+	if err = json.Unmarshal(bin, &response); err != nil {
+		return
 	}
-	return nil
 
+	success = response.Success
+	return
 }
