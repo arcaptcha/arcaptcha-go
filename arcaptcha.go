@@ -7,6 +7,7 @@ import (
 	"net/http"
 )
 
+// arcaptchaApi arcaptcha verify API for captcha V2
 const arcaptchaApi = "https://arcaptcha.ir/2/siteverify"
 
 type Website struct {
@@ -20,11 +21,14 @@ type verifyReq struct {
 	ChallengeID string `json:"challenge_id"`
 }
 
+// VerifyResp represents verify API response
+// error codes are available in https://docs.arcaptcha.ir/en/API/Verify
 type VerifyResp struct {
 	Success    bool     `json:"success"`
 	ErrorCodes []string `json:"error-codes"`
 }
 
+// NewWebsite creates a new Website
 func NewWebsite(siteKey, secretKey string) *Website {
 	return &Website{
 		SiteKey:   siteKey,
@@ -32,6 +36,10 @@ func NewWebsite(siteKey, secretKey string) *Website {
 	}
 }
 
+// Verify calls arcaptcha verify API and returns result.
+//
+// if an error occurs while sending or receiving the request, returns error.
+// server side errors are available in VerifyResp.ErrorCodes.
 func (w *Website) Verify(token string) (VerifyResp, error) {
 	data := &verifyReq{
 		SiteKey:     w.SiteKey,
@@ -43,6 +51,7 @@ func (w *Website) Verify(token string) (VerifyResp, error) {
 	return resp, err
 }
 
+// sendRequest sends http request to 'url' and fill 'resp' by response body
 func sendRequest(method, url string, data interface{}, resp interface{}) error {
 	bin, err := json.Marshal(data)
 	if err != nil {
