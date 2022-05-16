@@ -1,0 +1,20 @@
+{{define "demo"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Go Package Demo</title>
+    <script src="https://widget.arcaptcha.ir/2/api.js"></script>
+</head>
+<body>
+<h3>Arcaptcha Demo</h3>
+<p>solve captcha and click on <b>Test</b> to test verify.</p>
+<form action="/" method="POST">
+    <div class="arcaptcha" data-site-key={{ .SiteKey }}></div>
+    <input type="submit" name="submitted" value="Test">
+</form>
+<p style="color: green">{{ .SuccessMsg }}</p>
+<p style="color: red">{{ .ErrorMsg }}</p>
+</body>
+</html>
+{{end}}
