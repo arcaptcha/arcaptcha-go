@@ -8,6 +8,12 @@ go get -u github.com/arcaptcha/arcaptcha-go
 cd $GOPATH/src/github.com/arcaptcha/arcaptcha-go
 go build example.go
 ```
+or
+```shell
+git clone https://github.com/arcaptcha/arcaptcha-go.git
+cd arcaptcha-go/examples
+go build example.go
+```
 
 ### Run
 ```shell
