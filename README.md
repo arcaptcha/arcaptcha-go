@@ -65,6 +65,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 func verifyCaptcha(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		r.ParseForm()
 		token := r.FormValue("arcaptcha-token")
 		result, err := website.Verify(token)
 		if err != nil {

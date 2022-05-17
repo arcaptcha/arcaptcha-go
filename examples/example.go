@@ -36,24 +36,20 @@ func main() {
 
 func handleDemo(w http.ResponseWriter, r *http.Request) {
 	var successMsg, errorMsg string
-	err := r.ParseForm()
-	if err != nil {
-		errorMsg = "error in parse form"
-	} else {
-		// check form is submitted
-		_, submitted := r.Form["submitted"]
-		if submitted {
-			// can verify captcha
-			token := r.FormValue("arcaptcha-token")
-			result, err := website.Verify(token)
-			if err != nil {
-				log.Fatal(err)
-			}
-			if result.Success {
-				successMsg = "captcha verified"
-			} else {
-				errorMsg = fmt.Sprintf("captcha not verified, error-codes: %v", result.ErrorCodes)
-			}
+	// check form is submitted
+	r.ParseForm()
+	submitted := r.FormValue("submitted")
+	if submitted != "" {
+		// verify captcha
+		token := r.FormValue("arcaptcha-token")
+		result, err := website.Verify(token)
+		if err != nil {
+			log.Fatal(err)
+		}
+		if result.Success {
+			successMsg = "captcha verified"
+		} else {
+			errorMsg = fmt.Sprintf("captcha not verified, error-codes: %v", result.ErrorCodes)
 		}
 	}
 
