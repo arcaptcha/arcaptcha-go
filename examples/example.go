@@ -44,8 +44,7 @@ func handleDemo(w http.ResponseWriter, r *http.Request) {
 		_, submitted := r.Form["submitted"]
 		if submitted {
 			// can verify captcha
-			tokenForm, _ := r.Form["arcaptcha-token"]
-			token := tokenForm[0]
+			token := r.FormValue("arcaptcha-token")
 			result, err := website.Verify(token)
 			if err != nil {
 				log.Fatal(err)
