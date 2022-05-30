@@ -23,9 +23,9 @@ Register on [Arcaptcha](https://arcaptcha.ir/), create website and get your own 
 
 ```go
 website := arcaptcha.NewWebsite("YOUR_SITE_KEY", "YOUR_SECRET_KEY")
-//'arcaptcha-token' is created for each captcha
-//After you put captcha widget in your website, you can get 'arcaptcha-token' from form
-result, err := website.Verify("arcaptcha-token")
+//'arcaptcha-response' is created for each captcha
+//After you put captcha widget in your website, you can get 'arcaptcha-response' from form
+result, err := website.Verify("arcaptcha-response")
 if err != nil {
     // error in sending or receiving API request
     // handle error
@@ -66,8 +66,8 @@ func handler(w http.ResponseWriter, r *http.Request) {
 func verifyCaptcha(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		r.ParseForm()
-		token := r.FormValue("arcaptcha-token")
-		result, err := website.Verify(token)
+		response := r.FormValue("arcaptcha-response")
+		result, err := website.Verify(response)
 		if err != nil {
 			// error in sending or receiving API request
 			// handle error
