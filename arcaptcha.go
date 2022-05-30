@@ -16,16 +16,19 @@ type Website struct {
 }
 
 type verifyReq struct {
-	SiteKey     string `json:"site_key"`
-	SecretKey   string `json:"secret_key"`
-	ChallengeID string `json:"challenge_id"`
+	SiteKey   string `json:"sitekey"`
+	SecretKey string `json:"secret"`
+	Response  string `json:"response"`
+	RemoteIp  string `json:"remoteip"`
 }
 
 // VerifyResp represents verify API response
 // error codes are available in https://docs.arcaptcha.ir/en/API/Verify
 type VerifyResp struct {
-	Success    bool     `json:"success"`
-	ErrorCodes []string `json:"error-codes"`
+	Success     bool     `json:"success"`
+	ChallengeTS string   `json:"challenge_ts,omitempty"`
+	Hostname    string   `json:"hostname,omitempty"`
+	ErrorCodes  []string `json:"error-codes,omitempty"`
 }
 
 // NewWebsite creates a new Website
@@ -40,11 +43,11 @@ func NewWebsite(siteKey, secretKey string) *Website {
 //
 // if an error occurs while sending or receiving the request, returns error.
 // server side errors are available in VerifyResp.ErrorCodes.
-func (w *Website) Verify(token string) (VerifyResp, error) {
+func (w *Website) Verify(response string) (VerifyResp, error) {
 	data := &verifyReq{
-		SiteKey:     w.SiteKey,
-		SecretKey:   w.SecretKey,
-		ChallengeID: token,
+		SiteKey:   w.SiteKey,
+		SecretKey: w.SecretKey,
+		Response:  response,
 	}
 	var resp VerifyResp
 	err := sendRequest(http.MethodPost, arcaptchaApi, data, &resp)
