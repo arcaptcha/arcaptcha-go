@@ -8,7 +8,7 @@ import (
 )
 
 // arcaptchaApi arcaptcha verify API for captcha V2
-const arcaptchaApi = "https://arcaptcha.ir/2/siteverify"
+const arcaptchaApi = "https://arcaptcha.co/2/siteverify"
 
 type Website struct {
 	SiteKey   string
