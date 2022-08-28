@@ -13,6 +13,7 @@ const arcaptchaApi = "https://arcaptcha.co/2/siteverify"
 type Website struct {
 	SiteKey   string
 	SecretKey string
+	verifyUrl string
 }
 
 type verifyReq struct {
@@ -36,7 +37,12 @@ func NewWebsite(siteKey, secretKey string) *Website {
 	return &Website{
 		SiteKey:   siteKey,
 		SecretKey: secretKey,
+		verifyUrl: arcaptchaApi,
 	}
+}
+
+func (w *Website) SetVerifyUrl(url string) {
+	w.verifyUrl = url
 }
 
 // Verify calls arcaptcha verify API and returns result.
@@ -50,7 +56,7 @@ func (w *Website) Verify(response string) (VerifyResp, error) {
 		Response:  response,
 	}
 	var resp VerifyResp
-	err := sendRequest(http.MethodPost, arcaptchaApi, data, &resp)
+	err := sendRequest(http.MethodPost, w.verifyUrl, data, &resp)
 	return resp, err
 }
 
