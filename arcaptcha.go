@@ -3,6 +3,7 @@ package arcaptcha
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 )
@@ -81,6 +82,9 @@ func sendRequest(method, url string, data interface{}, resp interface{}) error {
 	bin, err = ioutil.ReadAll(res.Body)
 	if err != nil {
 		return err
+	}
+	if res.StatusCode != http.StatusOK {
+		return fmt.Errorf("%v: %v", res.Status, string(bin))
 	}
 	if err = json.Unmarshal(bin, resp); err != nil {
 		return err
