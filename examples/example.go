@@ -44,7 +44,7 @@ func handleDemo(w http.ResponseWriter, r *http.Request) {
 		response := r.FormValue("arcaptcha-response")
 		result, err := website.Verify(response)
 		if err != nil {
-			log.Fatal(err)
+			log.Println(err)
 		}
 		if result.Success {
 			successMsg = "captcha verified"

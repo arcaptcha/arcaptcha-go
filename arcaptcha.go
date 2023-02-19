@@ -6,14 +6,20 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"time"
 )
 
 // arcaptchaApi arcaptcha verify API for captcha V2
-const arcaptchaApi = "https://arcaptcha.co/2/siteverify"
+const (
+	arcaptchaApi   = "https://arcaptcha.co/2/siteverify"
+	defaultTimeout = 5 * time.Second
+)
 
 type Website struct {
 	SiteKey   string
 	SecretKey string
+
+	client    *http.Client
 	verifyUrl string
 }
 
@@ -38,12 +44,17 @@ func NewWebsite(siteKey, secretKey string) *Website {
 	return &Website{
 		SiteKey:   siteKey,
 		SecretKey: secretKey,
+		client:    &http.Client{Timeout: defaultTimeout},
 		verifyUrl: arcaptchaApi,
 	}
 }
 
 func (w *Website) SetVerifyUrl(url string) {
 	w.verifyUrl = url
+}
+
+func (w *Website) SetTimeout(timeout time.Duration) {
+	w.client.Timeout = timeout
 }
 
 // Verify calls arcaptcha verify API and returns result.
@@ -57,12 +68,12 @@ func (w *Website) Verify(response string) (VerifyResp, error) {
 		Response:  response,
 	}
 	var resp VerifyResp
-	err := sendRequest(http.MethodPost, w.verifyUrl, data, &resp)
+	err := w.sendRequest(http.MethodPost, w.verifyUrl, data, &resp)
 	return resp, err
 }
 
 // sendRequest sends http request to 'url' and fill 'resp' by response body
-func sendRequest(method, url string, data interface{}, resp interface{}) error {
+func (w *Website) sendRequest(method, url string, data, resp interface{}) error {
 	bin, err := json.Marshal(data)
 	if err != nil {
 		return err
@@ -72,7 +83,7 @@ func sendRequest(method, url string, data interface{}, resp interface{}) error {
 		return err
 	}
 	req.Header.Add("Content-Type", "application/json")
-	res, err := http.DefaultClient.Do(req)
+	res, err := w.client.Do(req)
 	if err != nil {
 		return err
 	}
