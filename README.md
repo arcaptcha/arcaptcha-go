@@ -27,13 +27,13 @@ website := arcaptcha.NewWebsite("YOUR_SITE_KEY", "YOUR_SECRET_KEY")
 //After you put captcha widget in your website, you can get 'arcaptcha-response' from form
 result, err := website.Verify("arcaptcha-response")
 if err != nil {
-    // error in sending or receiving API request
-    // handle error
+// error in sending or receiving API request
+// handle error
 }
 if !result.Success {
-    // captcha not verified
-    // can see result.ErrorCodes to find what's wrong
-    // throw specific error
+// captcha not verified
+// can see result.ErrorCodes to find what's wrong
+// throw specific error
 }
 // it's ok
 ```
@@ -82,4 +82,12 @@ func verifyCaptcha(next http.Handler) http.Handler {
 		next.ServeHTTP(w, r)
 	})
 }
+```
+
+you can set `timeout` for verify request:
+
+```go
+website := arcaptcha.NewWebsite("YOUR_SITE_KEY", "YOUR_SECRET_KEY")
+website.SetTimeout(1*time.Second)
+result, err := website.Verify("arcaptcha-response") // returns "context deadline" error if it takes more than 1 second
 ```
